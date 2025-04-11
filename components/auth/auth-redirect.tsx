@@ -8,17 +8,27 @@ interface AuthRedirectProps {
   redirectTo?: string;
 }
 
+/**
+ * Server component that redirects authenticated users away from auth pages
+ * Provides a consistent way to handle authenticated users trying to access login/register pages
+ */
 export default async function AuthRedirect({
   children,
   redirectTo = "/dashboard",
 }: AuthRedirectProps) {
+  const headersList = await headers();
   const session = await auth.api.getSession({
-    headers: await headers(),
+    headers: headersList,
   });
 
-  if (session) {
-    redirect(redirectTo);
+  // If user is already authenticated, redirect to specified page
+  if (session && session.user) {
+    console.log(
+      `[AuthRedirect] Authenticated user ${session.user.id} redirected from auth page to ${redirectTo}`
+    );
+    return redirect(redirectTo);
   }
 
+  // User is not authenticated, show the children (auth page)
   return <>{children}</>;
 }

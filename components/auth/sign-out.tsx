@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+import type { ComponentProps } from "react";
 
 interface ErrorContext {
   error: {
@@ -13,7 +15,22 @@ interface ErrorContext {
   };
 }
 
-export default function SignOutButton() {
+interface SignOutButtonProps
+  extends Omit<ComponentProps<typeof Button>, "onClick"> {
+  showIcon?: boolean;
+  customIcon?: React.ReactNode;
+  text?: string;
+}
+
+export default function SignOutButton({
+  variant = "destructive",
+  size = "default",
+  className,
+  showIcon = true,
+  customIcon,
+  text = "Sign Out",
+  ...props
+}: SignOutButtonProps) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -41,14 +58,15 @@ export default function SignOutButton() {
 
   return (
     <Button
-      variant="destructive"
-      size="lg"
-      className="gap-2"
+      variant={variant}
+      size={size}
+      className={cn("gap-2", className)}
       disabled={loading}
       onClick={handleSignOut}
+      {...props}
     >
-      <LogOut size={16} />
-      Sign Out
+      {showIcon && (customIcon || <LogOut size={16} />)}
+      {text}
     </Button>
   );
 }

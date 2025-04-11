@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
 import Image from "next/image";
+import { IconLogout } from "@tabler/icons-react";
 
 export default async function Home() {
   const session = await auth.api.getSession({
@@ -12,7 +13,7 @@ export default async function Home() {
   return (
     <main className="flex flex-col gap-3 items-center justify-center p-10">
       <div className="flex gap-3">
-        <button className="bg-neutral-700 text-white p-2 rounded-md">
+        <button className="bg-neutral-700 text-white p-2 rounded-sm">
           <Link href={"/sign-in"}>Sign In</Link>
         </button>
         <button className="bg-neutral-700 text-white p-2 rounded-md">
@@ -21,7 +22,16 @@ export default async function Home() {
         <button className="bg-emerald-500 text-white p-2 rounded-md">
           <Link href={"/dashboard"}>Dashboard</Link>
         </button>
-        {session ? <SignOut /> : null}
+        {session ? (
+          <SignOut
+            variant="destructive"
+            size="sm"
+            className="cursor-pointer flex h-12 items-center px-2 py-0 text-md "
+            showIcon={true}
+            text="Log out"
+            customIcon={<IconLogout className="mr-2 size-6" />}
+          />
+        ) : null}
       </div>
       {session?.user && (
         <div className="flex flex-col items-center gap-2">

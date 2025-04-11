@@ -96,8 +96,15 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <SignOut />
+            <DropdownMenuItem asChild>
+              <SignOut
+                variant="ghost"
+                size="sm"
+                className="cursor-pointer flex h-8 w-full justify-start items-center px-2 py-0 text-sm "
+                showIcon={true}
+                text="Log out"
+                customIcon={<IconLogout className="mr-2 size-4" />}
+              />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -3,10 +3,10 @@ import { auth } from "@/lib/auth";
 import { Separator } from "@/components/ui/separator";
 import SignOut from "@/components/auth/sign-out";
 import Image from "next/image";
-import AuthGuard from "@/components/auth/auth-guard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 export default async function EditAccountPage() {
   const session = await auth.api.getSession({
@@ -14,26 +14,22 @@ export default async function EditAccountPage() {
   });
 
   if (!session) {
-    return (
-      <AuthGuard redirectTo="/sign-in">
-        <p>Redirecting...</p>
-      </AuthGuard>
-    );
+    return null; // Layout will handle redirect
   }
 
   return (
-    <main className="max-w-6xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Account Settings</h1>
-        <div className="flex gap-4">
+    <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl font-bold">Edit Profile</h1>
+        <div className="flex gap-3">
           <Button variant="outline" asChild>
-            <a href="/dashboard">Back to Dashboard</a>
+            <Link href="/dashboard/account">Back to Account</Link>
           </Button>
-          <SignOut />
+          <SignOut size="sm" variant="outline" />
         </div>
       </div>
 
-      <Separator className="my-6" />
+      <Separator className="my-2" />
 
       <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-8">
         <div className="flex flex-col items-center gap-4">
@@ -101,7 +97,7 @@ export default async function EditAccountPage() {
         </div>
       </div>
 
-      <div className="mt-12">
+      <div className="mt-8">
         <h2 className="text-xl font-semibold mb-4">Security</h2>
         <Separator className="mb-6" />
         <div className="bg-card rounded-lg shadow-sm p-6">
@@ -132,6 +128,6 @@ export default async function EditAccountPage() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

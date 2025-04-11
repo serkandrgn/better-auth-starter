@@ -4,7 +4,7 @@ import SignOut from "@/components/auth/sign-out";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import AuthGuard from "@/components/auth/auth-guard";
+import { Button } from "@/components/ui/button";
 
 export default async function Account() {
   const session = await auth.api.getSession({
@@ -12,23 +12,22 @@ export default async function Account() {
   });
 
   if (!session) {
-    // Server-side redirect if no session is found
-    // This adds another layer of security beyond component-level checks
-    return (
-      <AuthGuard redirectTo="/sign-in">
-        <p>Redirecting...</p>
-      </AuthGuard>
-    );
+    return null; // Layout will handle redirect
   }
 
   return (
-    <main className="max-w-6xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <SignOut />
+    <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl font-bold">Account</h1>
+        <div className="flex gap-3">
+          <Button variant="outline" asChild>
+            <Link href="/dashboard">Dashboard</Link>
+          </Button>
+          <SignOut size="sm" variant="outline" />
+        </div>
       </div>
 
-      <Separator className="my-6" />
+      <Separator className="my-2" />
 
       <div className="bg-card rounded-lg shadow-sm p-6">
         <div className="flex flex-col sm:flex-row gap-8 items-start sm:items-center">
@@ -58,34 +57,28 @@ export default async function Account() {
               User ID: {session.user.id}
             </p>
             <div className="flex gap-2">
-              <Link
-                href="/account/edit"
-                className="text-sm bg-secondary hover:bg-secondary/80 text-secondary-foreground px-3 py-1 rounded"
-              >
-                Edit Profile
-              </Link>
-              <Link
-                href="/passkey"
-                className="text-sm bg-secondary hover:bg-secondary/80 text-secondary-foreground px-3 py-1 rounded"
-              >
-                Manage Passkeys
-              </Link>
+              <Button variant="outline" asChild size="sm">
+                <Link href="/dashboard/account/edit">Edit Profile</Link>
+              </Button>
+              <Button variant="outline" asChild size="sm">
+                <Link href="/passkey">Manage Passkeys</Link>
+              </Button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
         {[1, 2, 3].map((item) => (
           <div key={item} className="bg-card p-6 rounded-lg shadow-sm">
-            <h3 className="font-medium mb-2">Card {item}</h3>
+            <h3 className="font-medium mb-2">Account Info {item}</h3>
             <p className="text-muted-foreground text-sm">
-              This is a sample card. You can replace this with actual dashboard
-              content.
+              This is a sample card. You can replace this with actual account
+              information.
             </p>
           </div>
         ))}
       </div>
-    </main>
+    </div>
   );
 }

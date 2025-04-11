@@ -9,6 +9,7 @@ This project implements a secure, multi-layered authentication approach:
 1. **Page-Level Authentication**: Each protected route verifies authentication at the page component level using server components
 2. **AuthGuard Component**: A reusable component that provides consistent authentication verification
 3. **Server-Side Session Validation**: Sessions are validated on the server side
+4. **Layout-Based Protection**: Dashboard layout provides an additional layer of authentication checking
 
 This approach helps mitigate security vulnerabilities like [CVE-2025-29927](https://www.picussecurity.com/resource/blog/cve-2025-29927-nextjs-middleware-bypass-vulnerability), which can affect Next.js applications that rely solely on middleware for authentication.
 
@@ -18,9 +19,27 @@ This approach helps mitigate security vulnerabilities like [CVE-2025-29927](http
 - Email/password authentication
 - Social provider authentication (GitHub, Google)
 - Passkey support
-- Responsive UI with Tailwind CSS and shadcn/ui
+- Responsive UI with Tailwind CSS and shadcn/ui components
 - PostgreSQL database with Drizzle ORM
 - Route protection with page-level authentication
+- Dashboard layout with sidebar navigation
+- Customizable UI components with flexible styling options
+
+## Project Structure
+
+```
+app/
+├── (auth)/           # Authentication routes
+│   ├── sign-in/      # Sign in page
+│   └── sign-up/      # Sign up page
+├── dashboard/        # Protected dashboard routes
+│   ├── layout.tsx    # Dashboard layout with authentication
+│   ├── page.tsx      # Main dashboard page
+│   └── account/      # Account management
+│       ├── page.tsx  # Account overview
+│       └── edit/     # Profile editing
+└── ...
+```
 
 ## Getting Started
 
@@ -48,7 +67,28 @@ This project uses Better Auth for authentication. The main files to know about:
 
 - `lib/auth.ts`: Server-side authentication configuration
 - `lib/auth-client.ts`: Client-side authentication hooks and functions
-- `components/auth/*`: Authentication components and guards
+- `components/auth/*`: Authentication components and guards including:
+  - `auth-guard.tsx`: Server component for protecting routes
+  - `auth-redirect.tsx`: Server component for redirecting authenticated users
+  - `sign-in.tsx`: Sign-in form component
+  - `sign-up.tsx`: Sign-up form component
+  - `sign-out.tsx`: Flexible sign-out button component
+
+### Flexible SignOut Component
+
+The SignOut component is highly customizable:
+
+```tsx
+// Example usage with custom styling
+<SignOut
+  variant="ghost" // Use any button variant
+  size="sm" // Control the size
+  className="..." // Add custom classes
+  showIcon={true} // Show/hide the logout icon
+  text="Log out" // Customize the text
+  customIcon={<YourIcon />} // Use a custom icon
+/>
+```
 
 ## Learn More
 

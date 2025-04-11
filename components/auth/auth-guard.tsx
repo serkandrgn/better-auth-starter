@@ -40,7 +40,7 @@ export default async function AuthGuard({
 
   // Optional admin check (for future use)
   // Note: Add a 'role' field to your user type when implementing admin features
-  if (requireAdmin && (session.user as any).role !== "admin") {
+  if (requireAdmin && (session.user as { role?: string }).role !== "admin") {
     console.log(
       `[AuthGuard] Unauthorized admin access attempt by user ${session.user.id}`
     );

@@ -90,6 +90,8 @@ export default function SignUp() {
     if (!validateForm()) return;
 
     setLoading(true);
+    const loadingToast = toast.loading("Creating your account...");
+
     try {
       await signUp.email({
         email,
@@ -99,16 +101,19 @@ export default function SignUp() {
         callbackURL: "/dashboard",
         fetchOptions: {
           onSuccess: () => {
+            toast.dismiss(loadingToast);
             toast.success("Account created successfully!");
             router.push("/dashboard");
           },
           onError: (ctx: ErrorContext) => {
+            toast.dismiss(loadingToast);
             toast.error(ctx.error.message || "Failed to create account");
           },
         },
       });
     } catch (error) {
       console.error("Sign up error:", error);
+      toast.dismiss(loadingToast);
       toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);
@@ -221,15 +226,14 @@ export default function SignUp() {
           </div>
           <Button
             type="submit"
-            className="w-full"
+            className="w-full relative cursor-pointer"
             disabled={loading}
             onClick={handleSignUp}
           >
-            {loading ? (
-              <Loader2 size={16} className="animate-spin" />
-            ) : (
-              "Create an account"
+            {loading && (
+              <Loader2 size={16} className="animate-spin mr-2 inline-flex" />
             )}
+            <span>{loading ? "Creating account..." : "Create an account"}</span>
           </Button>
         </div>
       </CardContent>

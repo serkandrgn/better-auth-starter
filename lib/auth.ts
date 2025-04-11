@@ -8,7 +8,7 @@ import { passkey } from "better-auth/plugins/passkey";
 export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
-    async sendResetPassword(data, request) {
+    async sendResetPassword(data) {
       // Send an email to the user with a link to reset their password
       console.log("Reset password requested for:", data);
     },

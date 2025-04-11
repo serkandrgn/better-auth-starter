@@ -25,11 +25,11 @@ export default async function Home() {
         {session ? (
           <SignOut
             variant="destructive"
-            size="sm"
-            className="cursor-pointer flex h-12 items-center px-2 py-0 text-md "
+            size="default"
+            className="flex items-center cursor-pointer"
             showIcon={true}
-            text="Log out"
-            customIcon={<IconLogout className="mr-2 size-6" />}
+            text="Sign Out"
+            customIcon={<IconLogout className="mr-2 size-5" />}
           />
         ) : null}
       </div>

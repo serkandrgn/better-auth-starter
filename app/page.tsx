@@ -18,6 +18,9 @@ export default async function Home() {
         <button className="bg-neutral-700 text-white p-2 rounded-md">
           <Link href={"/sign-up"}>Sign Up</Link>
         </button>
+        <button className="bg-emerald-500 text-white p-2 rounded-md">
+          <Link href={"/dashboard"}>Dashboard</Link>
+        </button>
         {session ? <SignOut /> : null}
       </div>
       {session?.user && (

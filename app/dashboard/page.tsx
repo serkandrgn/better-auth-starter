@@ -1,10 +1,15 @@
+import { AppSidebar } from "@/components/app-sidebar";
+import { ChartAreaInteractive } from "@/components/chart-area-interactive";
+import { DataTable } from "@/components/data-table";
+import { SectionCards } from "@/components/section-cards";
+import { SiteHeader } from "@/components/site-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import SignOut from "@/components/auth/sign-out";
-import Image from "next/image";
-import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
+
 import AuthGuard from "@/components/auth/auth-guard";
+
+import data from "./data.json";
 
 export default async function Dashboard() {
   const session = await auth.api.getSession({
@@ -20,72 +25,30 @@ export default async function Dashboard() {
       </AuthGuard>
     );
   }
-
   return (
-    <main className="max-w-6xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <SignOut />
-      </div>
-
-      <Separator className="my-6" />
-
-      <div className="bg-card rounded-lg shadow-sm p-6">
-        <div className="flex flex-col sm:flex-row gap-8 items-start sm:items-center">
-          <div className="relative">
-            {session.user.image ? (
-              <Image
-                src={session.user.image}
-                alt={`${session.user.name}'s avatar`}
-                className="rounded-full border-4 border-primary/10"
-                width={120}
-                height={120}
-                unoptimized
-              />
-            ) : (
-              <div className="w-28 h-28 bg-secondary flex items-center justify-center rounded-full border-4 border-primary/10">
-                <span className="text-2xl font-bold text-secondary-foreground">
-                  {session.user.name?.charAt(0).toUpperCase() || "U"}
-                </span>
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
+        } as React.CSSProperties
+      }
+    >
+      <AppSidebar variant="inset" />
+      <SidebarInset>
+        <SiteHeader />
+        <div className="flex flex-1 flex-col">
+          <div className="@container/main flex flex-1 flex-col gap-2">
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+              <SectionCards />
+              <div className="px-4 lg:px-6">
+                <ChartAreaInteractive />
               </div>
-            )}
-          </div>
-
-          <div className="space-y-3">
-            <h2 className="text-2xl font-semibold">{session.user.name}</h2>
-            <p className="text-muted-foreground">{session.user.email}</p>
-            <p className="text-xs text-muted-foreground">
-              User ID: {session.user.id}
-            </p>
-            <div className="flex gap-2">
-              <Link
-                href="/account"
-                className="text-sm bg-secondary hover:bg-secondary/80 text-secondary-foreground px-3 py-1 rounded"
-              >
-                Edit Profile
-              </Link>
-              <Link
-                href="/passkey"
-                className="text-sm bg-secondary hover:bg-secondary/80 text-secondary-foreground px-3 py-1 rounded"
-              >
-                Manage Passkeys
-              </Link>
+              <DataTable data={data} />
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-        {[1, 2, 3].map((item) => (
-          <div key={item} className="bg-card p-6 rounded-lg shadow-sm">
-            <h3 className="font-medium mb-2">Card {item}</h3>
-            <p className="text-muted-foreground text-sm">
-              This is a sample card. You can replace this with actual dashboard
-              content.
-            </p>
-          </div>
-        ))}
-      </div>
-    </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

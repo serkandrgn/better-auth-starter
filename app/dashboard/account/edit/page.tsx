@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
-export default async function AccountPage() {
+export default async function EditAccountPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
